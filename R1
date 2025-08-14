@@ -1,0 +1,189 @@
+Building configuration...
+
+Current configuration : 2547 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+resource policy
+!
+ip subnet-zero
+no ip icmp rate-limit unreachable
+ip cef
+ip tcp synwait-time 5
+!
+!
+no ip dhcp use vrf connected
+!
+!
+ip name-server 192.168.106.1
+ip name-server 192.168.1.1
+ip name-server 8.8.8.8
+no ip ips deny-action ips-interface
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ ip address 1.1.1.1 255.255.255.0
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet1/0
+ ip address 172.10.1.2 255.255.255.0
+ ip access-group 100 in
+ duplex half
+!
+interface Ethernet1/1
+ ip address 172.10.3.2 255.255.255.0
+ ip access-group 100 in
+ duplex half
+!
+interface Ethernet1/2
+ ip address 172.11.1.2 255.255.255.0
+ ip access-group 100 out
+ duplex half
+!
+interface Ethernet1/3
+ ip address 172.11.3.2 255.255.255.0
+ ip access-group 100 out
+ duplex half
+!
+interface Ethernet1/4
+ ip address 172.12.1.2 255.255.255.0
+ duplex half
+!
+interface Ethernet1/5
+ ip address 172.12.2.2 255.255.255.0
+ duplex half
+!
+interface Ethernet1/6
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet1/7
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/4
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/5
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/6
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/7
+ no ip address
+ shutdown
+ duplex half
+!
+router ospf 1
+ log-adjacency-changes
+ network 1.1.1.0 0.0.0.255 area 0
+ network 172.10.1.0 0.0.0.255 area 0
+ network 172.10.3.0 0.0.0.255 area 0
+ network 172.11.1.0 0.0.0.255 area 0
+ network 172.11.3.0 0.0.0.255 area 0
+ network 172.12.1.0 0.0.0.255 area 0
+ network 172.12.2.0 0.0.0.255 area 0
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 192.168.106.2
+no ip http server
+no ip http secure-server
+!
+!
+!
+access-list 100 deny   icmp host 172.2.0.4 172.5.0.0 0.0.0.255 echo
+access-list 100 permit ip any any
+no cdp log mismatch duplex
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ login
+!
+!
+end
