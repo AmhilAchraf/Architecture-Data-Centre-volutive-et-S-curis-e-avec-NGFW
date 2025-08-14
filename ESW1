@@ -1,0 +1,371 @@
+
+Building configuration...
+
+Current configuration : 9594 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service dhcp
+!
+hostname ESW1
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$oQoh$TpWzAU9JoKpQV.vujOF3C/
+!
+aaa new-model
+!
+!
+!
+aaa session-id common
+memory-size iomem 5
+no ip icmp rate-limit unreachable
+!
+!
+ip cef
+ip name-server 192.168.106.2
+ip name-server 192.168.1.1
+ip name-server 8.8.8.8
+!
+!
+ip auth-proxy max-nodata-conns 3
+ip admission max-nodata-conns 3
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree vlan 10 priority 8192
+spanning-tree vlan 20 priority 8192
+spanning-tree vlan 30 priority 8192
+vtp file nvram:vlan.dat
+
+username achraf privilege 15 password 0 achraf
+username helpdisk secret 5 $1$RoAr$ueKMxs6ijiwHyWJn2uzaI0
+username security-ing secret 5 $1$1AG/$87IKhxfUQiNVuBFoN6Da9/
+username wan-ing secret 5 $1$su87$W9nSULXpb/h95xcTig3sO1
+!
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+!
+interface Loopback1
+ ip address 11.11.11.11 255.255.255.0
+!
+interface Port-channel1
+ switchport mode trunk
+!
+interface FastEthernet1/0
+ switchport mode trunk
+ duplex full
+ speed 100
+!
+interface FastEthernet1/1
+ switchport mode trunk
+ duplex full
+ speed 100
+!
+interface FastEthernet1/2
+ switchport mode trunk
+ duplex full
+ speed 100
+!
+interface FastEthernet1/3
+ switchport mode trunk
+ duplex full
+ speed 100
+ channel-group 1 mode on
+!
+interface FastEthernet1/4
+ switchport mode trunk
+ duplex full
+ speed 100
+ channel-group 1 mode on
+!
+interface FastEthernet1/5
+ no switchport
+ ip address 172.10.1.1 255.255.255.0
+ duplex full
+ speed 100
+!
+interface FastEthernet1/6
+ no switchport
+ ip address 172.10.2.1 255.255.255.0
+ duplex full
+ speed 100
+!
+interface FastEthernet1/7
+ duplex full
+ speed 100
+!
+interface FastEthernet1/8
+ duplex full
+ speed 100
+!
+interface FastEthernet1/9
+ duplex full
+ speed 100
+!
+interface FastEthernet1/10
+ duplex full
+ speed 100
+!
+interface FastEthernet1/11
+ duplex full
+ speed 100
+!
+interface FastEthernet1/12
+ duplex full
+ speed 100
+!
+interface FastEthernet1/13
+ duplex full
+ speed 100
+!
+interface FastEthernet1/14
+ duplex full
+ speed 100
+!
+interface FastEthernet1/15
+ duplex full
+ speed 100
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan10
+ ip address 172.2.0.1 255.255.255.0
+ standby 1 ip 172.2.0.3
+ standby 1 priority 105
+ standby 1 preempt
+!
+interface Vlan20
+ ip address 172.3.0.1 255.255.255.0
+ standby 1 ip 172.3.0.3
+ standby 1 priority 105
+ standby 1 preempt
+!
+interface Vlan30
+ ip address 172.4.0.1 255.255.255.0
+ standby 1 ip 172.4.0.3
+ standby 1 priority 105
+ standby 1 preempt
+!
+router ospf 1
+ log-adjacency-changes
+ network 11.11.11.0 0.0.0.255 area 0
+ network 172.2.0.0 0.0.0.255 area 0
+ network 172.3.0.0 0.0.0.255 area 0
+ network 172.4.0.0 0.0.0.255 area 0
+ network 172.10.1.0 0.0.0.255 area 0
+ network 172.10.2.0 0.0.0.255 area 0
+!
+no ip http server
+no ip http secure-server
+!
+ip forward-protocol nd
+ip route 0.0.0.0 0.0.0.0 192.168.106.2
+!
+!
+no cdp log mismatch duplex
+!
+!
+!
+control-plane
+!
+!
+!
+!
+mgcp behavior g729-variants static-pt
+!
+!
+!
+!
+!
+banner exec ^C
+
+***************************************************************
+This is a normal Router with a SW module inside (NM-16ESW)
+It has been preconfigured with hard coded speed and duplex
+
+To create vlans use the command "vlan database" from exec mode
+After creating all desired vlans use "exit" to apply the config
+
+To view existing vlans use the command "show vlan-switch brief"
+
+Warning: You are using an old IOS image for this router.
+Please update the IOS to enable the "macro" command!
+***************************************************************
+
+^C
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line vty 0 3
+line vty 4
+parser view viewA
+ secret 5 $1$FH4a$W4pox8gSp7DnusHTYg/lX/
+ commands interface include shutdown
+ commands interface include ip address
+ commands interface include ip
+ commands configure include interface
+ commands exec include copy running-config startup-config
+ commands exec include copy running-config
+ commands exec include copy
+ commands exec include write
+ commands exec include traceroute
+ commands exec include ping
+ commands exec include configure terminal
+ commands exec include configure
+ commands exec include reload
+ commands exec include show ip interface brief
+ commands exec include show ip interface
+ commands exec include show ip
+ commands exec include show interfaces
+ commands exec include show running-config
+ commands exec include show
+ commands exec include clear counters
+ commands exec include clear
+ commands configure include interface FastEthernet1/0
+!
+parser view viewB
+ secret 5 $1$5DQh$zvrEC5XJgbag7YdnKa6qG/
+ commands interface include switchport
+ commands configure include vtp
+ commands configure include vlan
+ commands exec include vlan
+ commands exec include show vlan-switch
+ commands exec include show vlan-range
+ commands exec include show vlans
+ commands exec include show interfaces Null0 trunk
+ commands exec include show interfaces Null0 switchport
+ commands exec include show interfaces trunk
+ commands exec include show interfaces switchport
+ commands exec include show interfaces Vlan30 trunk
+ commands exec include show interfaces Vlan30 switchport
+ commands exec include show interfaces Vlan20 trunk
+ commands exec include show interfaces Vlan20 switchport
+ commands exec include show interfaces Vlan10 trunk
+ commands exec include show interfaces Vlan10 switchport
+ commands exec include show interfaces Vlan1 trunk
+ commands exec include show interfaces Vlan1 switchport
+ commands exec include show interfaces FastEthernet1/15 trunk
+ commands exec include show interfaces FastEthernet1/15 switchport
+ commands exec include show interfaces FastEthernet1/14 trunk
+ commands exec include show interfaces FastEthernet1/14 switchport
+ commands exec include show interfaces FastEthernet1/13 trunk
+ commands exec include show interfaces FastEthernet1/13 switchport
+ commands exec include show interfaces FastEthernet1/12 trunk
+ commands exec include show interfaces FastEthernet1/12 switchport
+ commands exec include show interfaces FastEthernet1/11 trunk
+ commands exec include show interfaces FastEthernet1/11 switchport
+ commands exec include show interfaces FastEthernet1/10 trunk
+ commands exec include show interfaces FastEthernet1/10 switchport
+ commands exec include show interfaces FastEthernet1/9 trunk
+ commands exec include show interfaces FastEthernet1/9 switchport
+ commands exec include show interfaces FastEthernet1/8 trunk
+ commands exec include show interfaces FastEthernet1/8 switchport
+ commands exec include show interfaces FastEthernet1/7 trunk
+ commands exec include show interfaces FastEthernet1/7 switchport
+ commands exec include show interfaces FastEthernet1/6 trunk
+ commands exec include show interfaces FastEthernet1/6 switchport
+ commands exec include show interfaces FastEthernet1/5 trunk
+ commands exec include show interfaces FastEthernet1/5 switchport
+ commands exec include show interfaces FastEthernet1/4 trunk
+ commands exec include show interfaces FastEthernet1/4 switchport
+ commands exec include show interfaces FastEthernet1/3 trunk
+ commands exec include show interfaces FastEthernet1/3 switchport
+ commands exec include show interfaces FastEthernet1/2 trunk
+ commands exec include show interfaces FastEthernet1/2 switchport
+ commands exec include show interfaces FastEthernet1/1 trunk
+ commands exec include show interfaces FastEthernet1/1 switchport
+ commands exec include show interfaces FastEthernet1/0 trunk
+ commands exec include show interfaces FastEthernet1/0 switchport
+ commands exec include show interfaces Port-channel1 trunk
+ commands exec include show interfaces Port-channel1 switchport
+ commands exec include show interfaces Loopback1 trunk
+ commands exec include show interfaces Loopback1 switchport
+ commands exec include show interfaces
+ commands exec include show
+ commands configure include interface FastEthernet1/0
+!
+parser view viewC
+ secret 5 $1$yHzs$BFXGLh3wYH86SLvRF8hyy0
+ commands configure include router
+ commands configure include ip routing
+ commands configure include ip
+ commands exec include configure terminal
+ commands exec include configure
+ commands exec include show bgp summary
+ commands exec include show bgp
+ commands exec include show protocols
+ commands exec include show ip route
+ commands exec include show ip
+ commands exec include show interfaces
+ commands exec include show running-config
+ commands exec include show
+ commands exec include clear ip ospf process
+ commands exec include clear ip ospf
+ commands exec include clear ip bgp *
+ commands exec include clear ip bgp
+ commands exec include clear ip
+ commands exec include clear
+!
+parser view viewD
+ secret 5 $1$BrF9$kjYJ6oUibv9jNKYnK1Nq0/
+ commands interface include ip access-group
+ commands interface include ip
+ commands configure include username
+ commands configure include aaa accounting
+ commands configure include aaa authorization
+ commands configure include aaa authentication
+ commands configure include aaa new-model
+ commands configure include aaa
+ commands exec include show aaa servers
+ commands exec include show aaa
+ commands exec include show ip access-lists
+ commands exec include show ip
+ commands exec include show
+!
+parser view helpdisk superview
+ secret 5 $1$W4Lj$PSS0ULlkx8NFO1IZmN3.v1
+ view viewA
+ view viewB
+!
+parser view wan-ing superview
+ secret 5 $1$H765$Cyk3bSqIYWa60dA5wwc5/0
+ view viewA
+ view viewC
+!
+parser view security-ing superview
+ secret 5 $1$i4VN$Qz/1AHGE6DBN6Zsf6yVrr.
+ view viewA
+ view viewD
+!
+!
+!
+end
