@@ -1,0 +1,223 @@
+Building configuration...
+
+Current configuration : 3157 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R3
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+resource policy
+!
+ip subnet-zero
+no ip icmp rate-limit unreachable
+ip cef
+ip tcp synwait-time 5
+!
+!
+no ip dhcp use vrf connected
+!
+!
+ip vrf A
+ rd 119:119
+ route-target export 200:200
+ route-target import 200:200
+!
+no ip domain lookup
+no ip ips deny-action ips-interface
+!
+mpls label protocol ldp
+mpls ldp router-id Loopback1
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ ip address 3.3.3.3 255.255.255.0
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet1/0
+ ip address 172.20.1.2 255.255.255.0
+ duplex half
+ mpls ip
+!
+interface Ethernet1/1
+ ip address 172.20.2.2 255.255.255.0
+ duplex half
+ mpls ip
+!
+interface Ethernet1/2
+ ip address 172.20.8.1 255.255.255.0
+ duplex half
+ mpls ip
+!
+interface Ethernet1/3
+ ip vrf forwarding A
+ ip address 172.30.3.1 255.255.255.0
+ duplex half
+!
+interface Ethernet1/4
+ ip vrf forwarding A
+ ip address 172.30.4.1 255.255.255.0
+ duplex half
+!
+interface Ethernet1/5
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet1/6
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet1/7
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/4
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/5
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/6
+ no ip address
+ shutdown
+ duplex half
+!
+interface Ethernet2/7
+ no ip address
+ shutdown
+ duplex half
+!
+router eigrp 1
+ network 3.3.3.0 0.0.0.255
+ network 172.20.1.0 0.0.0.255
+ network 172.20.2.0 0.0.0.255
+ network 172.20.8.0 0.0.0.255
+ auto-summary
+!
+router ospf 1 vrf A
+ log-adjacency-changes
+ redistribute bgp 100 subnets
+ network 172.30.3.0 0.0.0.255 area 0
+ network 172.30.4.0 0.0.0.255 area 0
+!
+router bgp 100
+ no synchronization
+ bgp log-neighbor-changes
+ neighbor 4.4.4.4 remote-as 100
+ neighbor 4.4.4.4 update-source Loopback1
+ neighbor 6.6.6.6 remote-as 100
+ neighbor 6.6.6.6 update-source Loopback1
+ neighbor 7.7.7.7 remote-as 100
+ neighbor 7.7.7.7 update-source Loopback1
+ no auto-summary
+ !
+ address-family vpnv4
+ neighbor 4.4.4.4 activate
+ neighbor 4.4.4.4 send-community extended
+ neighbor 6.6.6.6 activate
+ neighbor 6.6.6.6 send-community extended
+ neighbor 7.7.7.7 activate
+ neighbor 7.7.7.7 send-community extended
+ exit-address-family
+ !
+ address-family ipv4 vrf A
+ redistribute ospf 1 vrf A
+ no auto-summary
+ no synchronization
+ exit-address-family
+!
+ip classless
+ip route vrf A 0.0.0.0 0.0.0.0 192.168.106.2
+no ip http server
+no ip http secure-server
+!
+!
+!
+no cdp log mismatch duplex
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ login
+!
+!
+end
